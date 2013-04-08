@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace GridPattern.library.Support
+namespace GridPatternLibrary.Support
 {
     public static class Functions
     {

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace GridPattern.library.Xml
+namespace GridPatternLibrary.Xml
 {
     public static class XmlRecordAppender
     {

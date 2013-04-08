@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace GridPattern.library.Support
+namespace GridPatternLibrary.Support
 {
     public struct MqlStr
     {

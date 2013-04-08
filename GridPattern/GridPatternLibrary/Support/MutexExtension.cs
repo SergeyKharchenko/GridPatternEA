@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace GridPattern.library.Support
+namespace GridPatternLibrary.Support
 {
     public static class MutexExtension
     {

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Xml;
 
-namespace GridPattern.library.Xml
+namespace GridPatternLibrary.Xml
 {
     public static class XmlRecordCleaner
     {

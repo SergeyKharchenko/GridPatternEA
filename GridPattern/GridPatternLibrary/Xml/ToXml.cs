@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using GridPatternLibrary.Support;
 
-namespace GridPattern.library.Xml
+namespace GridPatternLibrary.Xml
 {
     public static class ToXml
     {

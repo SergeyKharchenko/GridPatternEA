@@ -10,6 +10,8 @@ namespace MqlEmulator
     {
         static void Main(string[] args)
         {
+            // int      legs[16][4]
+            // string   actions[16][4]
         }
     }
 }

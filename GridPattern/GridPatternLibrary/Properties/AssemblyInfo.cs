@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GridPattern.library")]
+[assembly: AssemblyTitle("GridPatternLibrary")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GridPattern.library")]
+[assembly: AssemblyProduct("GridPatternLibrary")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("17e01b4c-ef65-4597-8b89-4a5baf4d472a")]
+[assembly: Guid("b1c796d3-907a-42da-83c3-d45f04bdaa4c")]
 
 // Version information for an assembly consists of the following four values:
 //

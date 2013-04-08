@@ -1,6 +1,6 @@
 using System;
 
-namespace GridPattern.library.Support
+namespace GridPatternLibrary.Support
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class DllExport : Attribute

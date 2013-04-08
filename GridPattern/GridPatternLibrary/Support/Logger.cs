@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace GridPattern.library.Support
+namespace GridPatternLibrary.Support
 {
     public static class Logger
     {
