@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Connector.cs" />
     <Compile Include="Helpers\Abstract\IFileHelper.cs" />
+    <Compile Include="Helpers\Abstract\IPatternParser.cs" />
     <Compile Include="Helpers\Concrete\FileHelper.cs" />
     <Compile Include="Helpers\Concrete\UnsafeCodeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
