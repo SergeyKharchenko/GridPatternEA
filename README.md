@@ -1,0 +1,4 @@
+GridPatternEA
+=============
+
+MQL EA
