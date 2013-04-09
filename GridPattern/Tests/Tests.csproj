@@ -77,6 +77,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="GetDataTests.cs" />
+    <Compile Include="PatternNormalizerTests.cs" />
+    <Compile Include="PatternParserTests.cs" />
+    <Compile Include="PatternTransformerTests.cs" />
+    <Compile Include="PatternValidatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnsafeCodeHelperTests.cs" />
   </ItemGroup>
