@@ -29,6 +29,8 @@ namespace GridPatternLibrary.Helpers.Concrete
 
         public List<string> RemoveTitleRow(List<string> rows)
         {
+            if (rows.Count < 1)
+                throw new ArgumentException("Pattern row count is invalid");
             rows.RemoveAt(0);
             return rows;
         }

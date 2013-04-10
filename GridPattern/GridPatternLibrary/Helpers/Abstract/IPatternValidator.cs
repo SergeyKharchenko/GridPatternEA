@@ -4,6 +4,6 @@ namespace GridPatternLibrary.Helpers.Abstract
 {
     public interface IPatternValidator
     {
-        List<string> IsSizeValid(List<List<string>> data);
+        List<string> IsSizeValid(List<List<string>> pattern);
     }
 }

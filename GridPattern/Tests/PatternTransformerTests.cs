@@ -9,10 +9,10 @@ namespace Tests
     {
         private static readonly object[] intToCharData =
             {
-                new object[] {1, "A"},
-                new object[] {2, "B"},
-                new object[] {13, "M"},
-                new object[] {16, "P"},
+                new object[] {0, "A"},
+                new object[] {1, "B"},
+                new object[] {12, "M"},
+                new object[] {15, "P"},
             };
 
         [Test, TestCaseSource("intToCharData")]
@@ -25,8 +25,8 @@ namespace Tests
 
         private static readonly object[] intToCharDataWithException =
             {
-                new object[] {0, ""},
                 new object[] {-1, ""},
+                new object[] {16, ""},
                 new object[] {17, ""}
             };
 
@@ -40,10 +40,10 @@ namespace Tests
 
         private static readonly object[] charToIntData =
             {
-                new object[] {"A", 1},
-                new object[] {"B", 2},
-                new object[] {"M", 13},
-                new object[] {"P", 16},
+                new object[] {"A", 0},
+                new object[] {"B", 1},
+                new object[] {"M", 12},
+                new object[] {"P", 15},
             };
 
         [Test, TestCaseSource("charToIntData")]

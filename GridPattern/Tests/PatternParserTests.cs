@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GridPatternLibrary.Helpers.Concrete;
 using NUnit.Framework;
 using System.Linq;
@@ -43,15 +44,30 @@ namespace Tests
             Assert.That(result, Is.EqualTo(output));
         }
 
-        private static readonly object[] removeFirstRowData =
+        private static readonly object[] removeTitleRowData =
             {
                 new object[] {new List<string> {"Hello", "to", "Billy"}, new List<string> {"to", "Billy"}},
                 new object[] {new List<string> {""}, new List<string>()},
                 new object[] {new List<string> {"123"}, new List<string>()}
             };
 
-        [Test, TestCaseSource("removeFirstRowData")]
-        public void RemoveFirstRowTest(List<string> input, List<string> output)
+        [Test, TestCaseSource("removeTitleRowData")]
+        public void RemoveTitleRowTest(List<string> input, List<string> output)
+        {
+            var patternParser = new PatternParser();
+
+            var result = patternParser.RemoveTitleRow(input);
+
+            Assert.That(result, Is.EqualTo(output));
+        }
+
+        private static readonly object[] removeTitleRowWithExceptionData =
+            {
+                new object[] {new List<string> (), new List<string>()}
+            };
+
+        [Test, TestCaseSource("removeTitleRowWithExceptionData"), ExpectedException(typeof(ArgumentException))]
+        public void RemoveTitleRowWithExceptionTest(List<string> input, List<string> output)
         {
             var patternParser = new PatternParser();
 
@@ -94,7 +110,7 @@ namespace Tests
             Assert.That(result, Is.EqualTo(output));
         }
 
-        private static readonly object[] removeFirstColumnData =
+        private static readonly object[] removeTitleColumnData =
             {
                 new object[]
                     {
@@ -124,8 +140,8 @@ namespace Tests
                     }
             };
 
-        [Test, TestCaseSource("removeFirstColumnData")]
-        public void RemoveFirstColumnTest(List<List<string>> input, List<List<string>> output)
+        [Test, TestCaseSource("removeTitleColumnData")]
+        public void RemoveTitleColumnTest(List<List<string>> input, List<List<string>> output)
         {
             var patternParser = new PatternParser();
 
