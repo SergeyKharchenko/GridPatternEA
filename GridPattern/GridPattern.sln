@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MqlEmulator", "MqlEmulator\MqlEmulator.csproj", "{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{FD9B25F4-C703-47EF-BDFA-583AB8F290F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GridPatternLibrary", "GridPatternLibrary\GridPatternLibrary.csproj", "{483EE4A1-34B9-4590-9750-E9285B160150}"
@@ -17,18 +15,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}.Debug|x86.ActiveCfg = Debug|x86
-		{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}.Debug|x86.Build.0 = Debug|x86
-		{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}.Release|Mixed Platforms.Build.0 = Release|x86
-		{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}.Release|x86.ActiveCfg = Release|x86
-		{AA23C47F-F676-4132-99EC-EDCFFC1D5CF4}.Release|x86.Build.0 = Release|x86
 		{FD9B25F4-C703-47EF-BDFA-583AB8F290F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FD9B25F4-C703-47EF-BDFA-583AB8F290F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD9B25F4-C703-47EF-BDFA-583AB8F290F3}.Debug|Mixed Platforms.ActiveCfg = Debug|x86

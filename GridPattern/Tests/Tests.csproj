@@ -92,10 +92,6 @@
       <Project>{483ee4a1-34b9-4590-9750-e9285b160150}</Project>
       <Name>GridPatternLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MqlEmulator\MqlEmulator.csproj">
-      <Project>{aa23c47f-f676-4132-99ec-edcffc1d5cf4}</Project>
-      <Name>MqlEmulator</Name>
-    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

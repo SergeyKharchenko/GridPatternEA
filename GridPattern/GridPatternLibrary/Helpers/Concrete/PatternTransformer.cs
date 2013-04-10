@@ -14,6 +14,7 @@ namespace GridPatternLibrary.Helpers.Concrete
             index += StartCharPos;            
             return ((char) index).ToString(CultureInfo.InvariantCulture);
         }
+
         public static int CharToInt(string pattern)
         {
             if (pattern.Length != 1) 
@@ -22,6 +23,11 @@ namespace GridPatternLibrary.Helpers.Concrete
             if (index < 0 || index > 15)
                 throw new ArgumentException("Pattern index is invalid");
             return index;
+        }
+
+        public static int GetTransferDownLastRowIndex(int rowIndex, int columnIndex)
+        {
+            return rowIndex + 15 / (int)Math.Pow(2, columnIndex / 2);
         }
     }
 }

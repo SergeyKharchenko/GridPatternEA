@@ -68,5 +68,25 @@ namespace Tests
 
             Assert.That(result, Is.EqualTo(index));
         }
+
+        private static readonly object[] getTransferDownLastRowIndexData =
+            {
+                new object[] {0, 0, 15},
+                new object[] {0, 2, 7},
+                new object[] {0, 4, 3},
+                new object[] {0, 6, 1},
+                new object[] {8, 2, 15},
+                new object[] {8, 4, 11},
+                new object[] {12, 6, 13},
+                new object[] {15, 8, 15},
+            };
+
+        [Test, TestCaseSource("getTransferDownLastRowIndexData")]
+        public void GetTransferDownLastRowIndexTest(int rowIndex, int columnIndex, int lastRowIndex)
+        {
+            var result = PatternTransformer.GetTransferDownLastRowIndex(rowIndex, columnIndex);
+
+            Assert.That(result, Is.EqualTo(lastRowIndex));
+        }
     }
 }
