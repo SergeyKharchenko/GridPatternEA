@@ -69,11 +69,13 @@ namespace GridPatternLibrary.Helpers.Concrete
                     @";",
                 };
 
-            validActionPatterns.Aggregate(pattern, ClearValidAction);
+            var patternCopy = pattern.Select(row => new List<string>(row)).ToList();
 
-            for (var i = 0; i < pattern.Count; i++)
+            validActionPatterns.Aggregate(patternCopy, ClearValidAction);
+
+            for (var i = 0; i < patternCopy.Count; i++)
             {
-                errors.AddRange(from column in pattern[i]
+                errors.AddRange(from column in patternCopy[i]
                                 where !string.IsNullOrEmpty(column)
                                 select string.Format("Invalid action in pattern row {0}: {1}",
                                                      PatternTransformer.IntToChar(i), column));

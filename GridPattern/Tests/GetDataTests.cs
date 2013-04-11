@@ -34,7 +34,7 @@ P,,,,,,,,-20,BX2; SX1";
         {
             var fileHelperMock = new Mock<IFileHelper>();
             Connector.FileHelper = fileHelperMock.Object;
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"experts\libraries\pattern.csv");
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"experts\files\pattern.csv");
             fileHelperMock.Setup(helper => helper.ReadFile(filePath)).Returns(Pattern);
 
             var patternParserMock = new Mock<IPatternParser>();

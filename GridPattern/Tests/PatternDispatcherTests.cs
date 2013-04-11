@@ -12,7 +12,7 @@ namespace Tests
         {
             var pattern = new List<List<string>>
                 {
-                    new List<string> {"B1", "10", "S1", "20", "BX1", "-30", "SX1", "-10", "N"},
+                    new List<string> {"B1;B2", "10", "S1", "20", "BX1", "-30", "SX1", "-10", "N"},
                     new List<string> {"B2", "100", "S2", "-20", "BX2", "-30", "N", "-10", "N"}
                 };
 
@@ -34,7 +34,7 @@ namespace Tests
             Assert.That(dispatchedPattern.Actions.Count, Is.EqualTo(2));
             Assert.That(dispatchedPattern.Actions[0].Count, Is.EqualTo(5));
             Assert.That(dispatchedPattern.Actions[1].Count, Is.EqualTo(5));
-            Assert.That(dispatchedPattern.Actions[0][0], Is.EqualTo("B1"));
+            Assert.That(dispatchedPattern.Actions[0][0], Is.EqualTo("B1;B2"));
             Assert.That(dispatchedPattern.Actions[0][1], Is.EqualTo("S1"));
             Assert.That(dispatchedPattern.Actions[0][2], Is.EqualTo("BX1"));
             Assert.That(dispatchedPattern.Actions[0][3], Is.EqualTo("SX1"));

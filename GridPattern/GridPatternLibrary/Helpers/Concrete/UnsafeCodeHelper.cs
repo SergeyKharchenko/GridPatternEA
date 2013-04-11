@@ -4,13 +4,10 @@ namespace GridPatternLibrary.Helpers.Concrete
 {
     public static class UnsafeCodeHelper
     {
-        public const int FirstDimensionSize = 16;
-        public const int SecondDimensionSize = 4;
-
-        public static int Index(int x, int y)
+        public static int Index(int x, int y, int firstDimenshionSize, int secondDimensionSize)
         {
-            var index = x*SecondDimensionSize + y;
-            if (index > 63 || index < 0) 
+            var index = x * secondDimensionSize + y;
+            if (index > (firstDimenshionSize * secondDimensionSize - 1) || index < 0)
                 throw new ArgumentException("Index is invalid");
             return index;
         }

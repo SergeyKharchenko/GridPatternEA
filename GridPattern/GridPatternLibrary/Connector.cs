@@ -32,35 +32,66 @@ namespace GridPatternLibrary
             Thread.Sleep(milliseconds);
         } 
 
-        //[DllExport]
-        //public static unsafe bool GetData(string filePath, int* legs, MqlStr* actions, MqlStr* errors)
+        [DllExport]
+        public static unsafe int GetData(string filePath, int* legs, MqlStr* actions, MqlStr* errors)
+        {
+            var dispatchedPettern = GetData(filePath);
+            if (!dispatchedPettern.Success)
+            {
+                errors[0].SetString(dispatchedPettern.Error);
+                return 0;
+            }
+            for (var i = 0; i < dispatchedPettern.Legs.Count; i++)
+                for (var j = 0; j < dispatchedPettern.Legs[i].Count; j++)
+                {
+                    var index = UnsafeCodeHelper.Index(i, j, 16, 4);
+                    legs[index] = dispatchedPettern.Legs[i][j];
+                }
+            for (var i = 0; i < dispatchedPettern.Actions.Count; i++)
+                for (var j = 0; j < dispatchedPettern.Actions[i].Count; j++)
+                {
+                    var index = UnsafeCodeHelper.Index(i, j, 16, 5);
+                    actions[index].SetString(dispatchedPettern.Actions[i][j]);
+                }
+            return 1;
+        }
+
         public static DispatchedPattern GetData(string filePath)
         {
-            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), @"experts\libraries", filePath);
-            var pattern = FileHelper.ReadFile(fullPath);
+            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), @"experts\files", filePath);
+            string pattern;
+            try
+            {
+                pattern = FileHelper.ReadFile(fullPath);
+            }
+            catch (FileNotFoundException)
+            {
+                return new DispatchedPattern(false, "Pattern file not found");
+            }
             var parsedPattern = PatternParser.Parse(pattern);
-
+            
             var validationFunctions = new List<Func<List<List<string>>, List<string>>>
                 {
-                    PatternValidator.IsSizeValid,
-                    PatternValidator.IsPositionsValid,
-                    PatternValidator.IsSyntaxValid,
-                    PatternValidator.IsTypesValid,
-                    PatternValidator.IsActionDuplicateValid
+                   PatternValidator.IsSizeValid,
+                   PatternValidator.IsPositionsValid,
+                   PatternValidator.IsSyntaxValid,
+                   PatternValidator.IsTypesValid,
+                   PatternValidator.IsActionDuplicateValid
                 };
 
-            string error = string.Empty;
+            var error = string.Empty;
+
             if (!CheckOnValid(parsedPattern, validationFunctions, ref error))
                 return new DispatchedPattern(false, error);
 
             var normalizedPattern = PatternNormalizer.TransferDownPattern(parsedPattern);
-
+            
             validationFunctions.Clear();
             validationFunctions.Add(PatternValidator.IsCloseActionPositionValid);
-
+            
             if (!CheckOnValid(normalizedPattern, validationFunctions, ref error))
                 return new DispatchedPattern(false, error);
-
+            
             return PatternDispatcher.Dispatch(normalizedPattern);
         }
 
