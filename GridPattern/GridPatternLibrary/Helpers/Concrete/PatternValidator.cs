@@ -91,29 +91,37 @@ namespace GridPatternLibrary.Helpers.Concrete
             return pattern;
         }
 
-        public List<string> IsCloseActionPositionValid(List<List<string>> pattern)
+        public List<string> IsTypesValid(List<List<string>> pattern)
         {
             var errors = new List<string>();
 
-            var closePatterns = new List<string>
-                {
-                    @"BX\d+",
-                    @"SX\d+",
-                };
-
-            foreach (var regex in closePatterns.Select(closePattern => new Regex(closePattern)))
+            for (var i = 0; i < pattern.Count; i++)
             {
-                for (var i = 0; i < pattern.Count; i++)
+                var isLeg = true;
+                for (var j = 0; j < pattern[i].Count; j++)
                 {
-                    for (var j = 0; j < pattern[i].Count; j++)
+                    isLeg = !isLeg;
+                    if (string.IsNullOrEmpty(pattern[i][j]))
+                        continue;
+
+                    
+                    if (isLeg)
                     {
-                        var matchCollection = regex.Matches(pattern[i][j]);
-                        errors.AddRange(from Match match in matchCollection
-                                        let openAction = match.Groups[0].Value.Replace("X", "")
-                                        let found = FindOpenAction(pattern, i, j, openAction)
-                                        where !found
-                                        select string.Format("Invalid close action position in pattern row {0}: {1}",
-                                                             PatternTransformer.IntToChar(i), match.Groups[0].Value));
+                        int parseResult;
+                        if (!int.TryParse(pattern[i][j], out parseResult))
+                            errors.Add(string.Format("Invalid element type in pattern row {0}: {1}",
+                                                 PatternTransformer.IntToChar(i), pattern[i][j]));
+                    }
+                    else
+                    {
+                        var actions = pattern[i][j].Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var action in actions)
+                        {
+                            int parseResult;
+                            if (int.TryParse(action, out parseResult))
+                                errors.Add(string.Format("Invalid element type in pattern row {0}: {1}",
+                                                     PatternTransformer.IntToChar(i), action));
+                        }
                     }
                 }
             }
@@ -121,20 +129,6 @@ namespace GridPatternLibrary.Helpers.Concrete
             return errors;
         }
 
-        private static bool FindOpenAction(List<List<string>> pattern, int rowIndex, int columnIndex, string openAction)
-        {
-            var found = false;
-            for (var k = columnIndex - 1; k >= 0; k--)
-            {
-                var actions = pattern[rowIndex][k].Split(new[] {";"}, StringSplitOptions.RemoveEmptyEntries);
-                if (actions.Any(action => action == openAction))
-                {
-                    found = true;
-                    break;
-                }
-            }
-            return found;
-        }
 
         public List<string> IsActionDuplicateValid(List<List<string>> pattern)
         {
@@ -181,13 +175,58 @@ namespace GridPatternLibrary.Helpers.Concrete
             {
                 for (var j = columnIndex + 1; j < PatternRowLength; j++)
                 {
-                    var actions = pattern[i][j].Split(new[] {";"}, StringSplitOptions.RemoveEmptyEntries);
+                    var actions = pattern[i][j].Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                     if (actions.Any(action => action == currentAction))
                     {
                         duplicateRowIndex = i;
                         found = true;
                         break;
                     }
+                }
+            }
+            return found;
+        }
+
+        public List<string> IsCloseActionPositionValid(List<List<string>> pattern)
+        {
+            var errors = new List<string>();
+
+            var closePatterns = new List<string>
+                {
+                    @"BX\d+",
+                    @"SX\d+",
+                };
+
+            foreach (var regex in closePatterns.Select(closePattern => new Regex(closePattern)))
+            {
+                for (var i = 0; i < pattern.Count; i++)
+                {
+                    for (var j = 0; j < pattern[i].Count; j++)
+                    {
+                        var matchCollection = regex.Matches(pattern[i][j]);
+                        errors.AddRange(from Match match in matchCollection
+                                        let openAction = match.Groups[0].Value.Replace("X", "")
+                                        let found = FindOpenAction(pattern, i, j, openAction)
+                                        where !found
+                                        select string.Format("Invalid close action position in pattern row {0}: {1}",
+                                                             PatternTransformer.IntToChar(i), match.Groups[0].Value));
+                    }
+                }
+            }
+
+            return errors;
+        }
+
+        private static bool FindOpenAction(List<List<string>> pattern, int rowIndex, int columnIndex, string openAction)
+        {
+            var found = false;
+            for (var k = columnIndex - 1; k >= 0; k--)
+            {
+                var actions = pattern[rowIndex][k].Split(new[] {";"}, StringSplitOptions.RemoveEmptyEntries);
+                if (actions.Any(action => action == openAction))
+                {
+                    found = true;
+                    break;
                 }
             }
             return found;

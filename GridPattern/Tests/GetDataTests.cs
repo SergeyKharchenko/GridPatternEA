@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using GridPatternLibrary;
 using GridPatternLibrary.Helpers.Abstract;
 using Moq;
@@ -28,17 +30,59 @@ O,,,,,,-10,N,20,BX2; SX1
 P,,,,,,,,-20,BX2; SX1";
 
         [Test]
-        public void GetDataTest()
+        public void GetDataCallsVerifyTest()
         {
             var fileHelperMock = new Mock<IFileHelper>();
+            Connector.FileHelper = fileHelperMock.Object;
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"experts\libraries\pattern.csv");
             fileHelperMock.Setup(helper => helper.ReadFile(filePath)).Returns(Pattern);
-            Connector.FileHelper = fileHelperMock.Object;
 
-            var result = Connector.GetData("pattern.csv", null, null);
+            var patternParserMock = new Mock<IPatternParser>();
+            Connector.PatternParser = patternParserMock.Object;
+            var parsedPattern = new List<List<string>>
+                {
+                    new List<string> {"B1", "10", "BX1"}
+                };
+            patternParserMock.Setup(helper => helper.Parse(Pattern)).Returns(parsedPattern);
 
-            Assert.That(result, Is.True);
+            var patternValidatorMock = new Mock<IPatternValidator>();
+            Connector.PatternValidator = patternValidatorMock.Object;
+            patternValidatorMock.Setup(helper => helper.IsSizeValid(parsedPattern)).Returns(new List<string>());
+            patternValidatorMock.Setup(helper => helper.IsPositionsValid(parsedPattern)).Returns(new List<string>());
+            patternValidatorMock.Setup(helper => helper.IsSyntaxValid(parsedPattern)).Returns(new List<string>());
+            patternValidatorMock.Setup(helper => helper.IsTypesValid(parsedPattern)).Returns(new List<string>());
+            patternValidatorMock.Setup(helper => helper.IsActionDuplicateValid(parsedPattern)).Returns(new List<string>());
+
+            var patternNormalizerMock = new Mock<IPatternNormalizer>();
+            Connector.PatternNormalizer = patternNormalizerMock.Object;
+            var normalizedPattern = new List<List<string>>
+                {
+                    new List<string> {"B1", "10", "BX1", "20", "S1"}
+                };
+            patternNormalizerMock.Setup(helper => helper.TransferDownPattern(parsedPattern)).Returns(normalizedPattern);
+
+            patternValidatorMock.Setup(helper => helper.IsCloseActionPositionValid(normalizedPattern)).Returns(new List<string>());
+
+            var patternDispatcherMock = new Mock<IPatternDispatcher>();
+            Connector.PatternDispatcher = patternDispatcherMock.Object;
+            patternDispatcherMock.Setup(helper => helper.Dispatch(normalizedPattern)).Returns(new DispatchedPattern(true, string.Empty));
+
+            var error = string.Empty;
+            var dispatchedPattern = Connector.GetData("pattern.csv");
+
             fileHelperMock.Verify(helper => helper.ReadFile(filePath), Times.Once());
+            patternParserMock.Verify(helper => helper.Parse(Pattern), Times.Once());
+            patternValidatorMock.Verify(helper => helper.IsSizeValid(parsedPattern), Times.Once());
+            patternValidatorMock.Verify(helper => helper.IsPositionsValid(parsedPattern), Times.Once());
+            patternValidatorMock.Verify(helper => helper.IsSyntaxValid(parsedPattern), Times.Once());
+            patternValidatorMock.Verify(helper => helper.IsTypesValid(parsedPattern), Times.Once());
+            patternValidatorMock.Verify(helper => helper.IsActionDuplicateValid(parsedPattern), Times.Once());
+            patternNormalizerMock.Verify(helper => helper.TransferDownPattern(parsedPattern), Times.Once());
+            patternValidatorMock.Verify(helper => helper.IsCloseActionPositionValid(normalizedPattern), Times.Once());
+            patternDispatcherMock.Verify(helper => helper.Dispatch(normalizedPattern), Times.Once());
+
+            Assert.That(dispatchedPattern.Success, Is.True);
+            Assert.That(error, Is.EqualTo(string.Empty));
         }
     }
 }

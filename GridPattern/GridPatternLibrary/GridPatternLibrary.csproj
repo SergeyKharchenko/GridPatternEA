@@ -41,11 +41,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connector.cs" />
+    <Compile Include="DispatchedPattern.cs" />
     <Compile Include="Helpers\Abstract\IFileHelper.cs" />
+    <Compile Include="Helpers\Abstract\IPatternDispatcher.cs" />
     <Compile Include="Helpers\Abstract\IPatternNormalizer.cs" />
     <Compile Include="Helpers\Abstract\IPatternParser.cs" />
     <Compile Include="Helpers\Abstract\IPatternValidator.cs" />
     <Compile Include="Helpers\Concrete\FileHelper.cs" />
+    <Compile Include="Helpers\Concrete\PatternDispatcher.cs" />
     <Compile Include="Helpers\Concrete\PatternNormalizer.cs" />
     <Compile Include="Helpers\Concrete\PatternParser.cs" />
     <Compile Include="Helpers\Concrete\PatternTransformer.cs" />

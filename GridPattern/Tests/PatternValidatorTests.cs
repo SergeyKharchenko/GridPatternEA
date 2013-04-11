@@ -498,6 +498,106 @@ P,,,,,,,,-20,BX2; SX1", "Invalid action in pattern row N: B0X"}
 
         #endregion
 
+        #region IsTypesValidTest
+
+        [Test]
+        public void IsTypesValidTest()
+        {
+            const string pattern = @",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
+A,B1; S1,10,BX1; SX1,20,N,10,N,20,N
+B,,,,,,,,-20,N
+C,,,,,,-10,N,30,N
+D,,,,,,,,-30,N
+E,,,,-20,S2,20,B3; SX2,20,BX3
+F,,,,,,,,-20,BX3
+G,,,,,,-20,SX2,10,N
+H,,,,,,,,-10,N
+I,,-10,B2; BX1,30,SX1,20,N,10,BX2
+J,,,,,,,,-10,BX2
+K,,,,,,-20,N,20,BX2
+L,,,,,,,,-20,BX2
+M,,,,-30,N,10,SX1,30,BX2
+N,,,,,,,,-30,BX2
+O,,,,,,-10,N,20,BX2; SX1
+P,,,,,,,,-20,BX2; SX1";
+
+            var patternParser = new PatternParser();
+            var data = patternParser.Parse(pattern);
+
+            var result = patternValidator.IsTypesValid(data);
+
+            Assert.That(result.Count, Is.EqualTo(0));
+        }
+
+        private static readonly object[] isTypesValidFailData =
+            {
+                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
+A,B1; S1,B1,BX1; SX1,20,N,10,N,20
+B,,,,,,,,-20,N
+C,,,,,,-10,N,30,N
+D,,,,,,,,-30,N
+E,,,,-20,S2,20,B3; SX2,20,BX3
+F,,,,,,,,-20,BX3
+G,,,,,,-20,SX2,10,N
+H,,,,,,,,-10,N
+I,,-10,B2; BX1,30,SX1,20,N,10,BX2
+J,,,,,,,,-10,BX2
+K,,,,,,-20,N,20,BX2
+L,,,,,,,,-20,BX2
+M,,,,-30,N,10,SX1,30,BX2
+N,,,,,,,,-30,BX2
+O,,,,,,-10,N,20,BX2; SX1
+P,,,,,,,,-20,BX2; SX1", "Invalid element type in pattern row A: B1"},
+                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
+A,B1; 10,10,BX1; SX1,20,N,10,N,20
+B,,,,,,,,-20,N
+C,,,,,,-10,N,30,N
+D,,,,,,,,-30,N
+E,,,,-20,S2,20,B3; SX2,20,BX3
+F,,,,,,,,-20,BX3
+G,,,,,,-20,SX2,10,N
+H,,,,,,,,-10,N
+I,,-10,B2; BX1,30,SX1,20,N,10,BX2
+J,,,,,,,,-10,BX2
+K,,,,,,-20,N,20,BX2
+L,,,,,,,,-20,BX2
+M,,,,-30,N,10,SX1,30,BX2
+N,,,,,,,,-30,BX2
+O,,,,,,-10,N,20,BX2; SX1
+P,,,,,,,,-20,BX2; SX1", "Invalid element type in pattern row A: 10"},
+                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
+A,B1,10,BX1; SX1,20,N,10,N,20
+B,,,,,,,,-20,N
+C,,,,,,-10,N,30,N
+D,,,,,,,,-30,N
+E,,,,-20,S2,20,B3; SX2,20,BX3
+F,,,,,,,,-20,BX3
+G,,,,,,-20,SX2,10,N
+H,,,,,,,,-10,N
+I,,-10,B2; BX1,30,SX1,20,N,10,BX2
+J,,,,,,,,-10,BX2
+K,,,,,,-20,N,20,BX2
+L,,,,,,,,-20,BX2
+M,,,,-30,N,10,SX1,30,-1
+N,,,,,,,,-30,BX2
+O,,,,,,-10,N,20,BX2; SX1
+P,,,,,,,,-20,BX2; SX1", "Invalid element type in pattern row M: -1"},
+            };
+
+        [Test, TestCaseSource("isTypesValidFailData")]
+        public void IsTypesValidFailTest(string pattern, string error)
+        {
+            var patternParser = new PatternParser();
+            var data = patternParser.Parse(pattern);
+
+            var result = patternValidator.IsTypesValid(data);
+
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result.First(), Is.EqualTo(error));
+        }
+
+        #endregion
+
         #region IsCloseActionPositionValidTest
 
         [Test]
