@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using GridPatternLibrary.Helpers.Abstract;
 using GridPatternLibrary.Helpers.Concrete;
 using GridPatternLibrary.Support;
 using System.Linq;
+using GridPatternLibrary.Xml;
 
 namespace GridPatternLibrary
 {
     public static class Connector
     {
+        private static readonly ReaderWriterLockSlim locker = new ReaderWriterLockSlim();
+
         public static IFileHelper FileHelper { get; set; }
         public static IPatternParser PatternParser { get; set; }
         public static IPatternNormalizer PatternNormalizer { get; set; }
@@ -106,6 +110,83 @@ namespace GridPatternLibrary
                 return false;
             }
             return true;
+        }
+
+        [DllExport]
+        public static unsafe int ParseActions(string actionsStr, MqlStr* actions, int* magics)
+        {
+            var tradeActions = ActionParser.Parse(actionsStr);
+            for (var i = 0; i < tradeActions.Count; i++)
+            {
+                actions[i].SetString(tradeActions[i].Action);
+                magics[i] = tradeActions[i].Magic;
+            }
+            return tradeActions.Count;
+        }
+
+        [DllExport]
+        public static string GetPattern(int gate, int sameLegCount)
+        {
+            var patterns = string.Empty;
+            for (var i = gate; i < gate + sameLegCount; i++)
+                patterns += PatternTransformer.IntToChar(i);
+
+            return patterns;
+        }
+
+        [DllExport]
+        public static int IsWatchedPattern(int pattern, string watchedPatterns)
+        {
+            foreach (var watchedPattern in watchedPatterns)
+            {
+                try
+                {
+                    if (pattern == PatternTransformer.CharToInt(watchedPattern.ToString(CultureInfo.InvariantCulture)))
+                        return 1;
+                }
+                catch (ArgumentException)
+                {
+                }                
+            }
+            return 0;
+        }
+
+        [DllExport]
+        public static unsafe void SaveSession(string appName, string recordId, MqlStr* keys, MqlStr* values, int count)
+        {
+            var appDataFileName = Functions.GetAppDataFileName(appName);
+            var attributes = new Dictionary<string, string>();
+            for (var index = 0; index < count; ++index)
+                attributes.Add(keys[index].ToString(), values[index].ToString());
+            recordId = recordId.Replace(" ", "");
+            locker.EnterWriteLock();
+            if (!File.Exists(appDataFileName))
+                ToXml.CreateXmlDefaulFile(appDataFileName);
+            XmlRecordAppender.AppendRecord(appDataFileName, recordId, attributes);
+            locker.ExitWriteLock();
+        }
+
+        [DllExport]
+        public static unsafe int LoadSession(string appName, string recordId, MqlStr* keys, MqlStr* values, int dataArraySize)
+        {
+            var appDataFileName = Functions.GetAppDataFileName(appName);
+            locker.EnterReadLock();
+            if (!File.Exists(appDataFileName))
+            {
+                locker.ExitReadLock();
+                return 0;
+            }
+            recordId = recordId.Replace(" ", "");
+            var dictionary = XmlRecordReader.ReadRecord(appDataFileName, recordId);
+            for (var index = 0; index < dictionary.Count; ++index)
+            {
+                if (index >= dataArraySize)
+                    break;
+                keys[index].SetString(dictionary.Keys.ElementAt(index));
+                values[index].SetString(dictionary.Values.ElementAt(index));
+            }
+            locker.ExitReadLock();
+            return dictionary.Count;
         }
     }
 }

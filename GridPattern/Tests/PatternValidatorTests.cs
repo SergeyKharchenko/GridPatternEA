@@ -598,110 +598,6 @@ P,,,,,,,,-20,BX2; SX1", "Invalid element type in pattern row M: -1"},
 
         #endregion
 
-        #region IsCloseActionPositionValidTest
-
-        [Test]
-        public void IsCloseActionPositionValidTest()
-        {
-            const string pattern = @",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
-A,B1; S1,10,BX1; SX1,20,N,10,N,20,N
-B,,,,,,,,-20,N
-C,,,,,,-10,N,30,N
-D,,,,,,,,-30,N
-E,,,,-20,S2,20,B3; SX2,20,BX3
-F,,,,,,,,-20,BX3
-G,,,,,,-20,SX2,10,N
-H,,,,,,,,-10,N
-I,,-10,B2; BX1,30,SX1,20,N,10,BX2
-J,,,,,,,,-10,BX2
-K,,,,,,-20,N,20,BX2
-L,,,,,,,,-20,BX2
-M,,,,-30,N,10,SX1,30,BX2
-N,,,,,,,,-30,BX2
-O,,,,,,-10,N,20,BX2; SX1
-P,,,,,,,,-20,BX2; SX1";
-
-            var patternParser = new PatternParser();
-            var data = patternParser.Parse(pattern);
-            var patternNormalizer = new PatternNormalizer();
-            data = patternNormalizer.TransferDownPattern(data);
-
-            var result = patternValidator.IsCloseActionPositionValid(data);
-
-            Assert.That(result.Count, Is.EqualTo(0));
-        }
-
-        private static readonly object[] isCloseActionPositionValidFailData =
-            {
-                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
-A,B1; S1,10,BX1; SX1,20,N,10,N,20
-B,,,,,,,,-20,N
-C,,,,,,-10,N,30,N
-D,,,,,,,,-30,N
-E,,,,-20,S2,20,B3; SX2,20,BX3
-F,,,,,,,,-20,BX3
-G,,,,,,-20,SX2,10,N
-H,,,,,,,,-10,BX2
-I,,-10,B2; BX1,30,SX1,20,N,10,BX2
-J,,,,,,,,-10,BX2
-K,,,,,,-20,N,20,BX2
-L,,,,,,,,-20,BX2
-M,,,,-30,N,10,SX1,30,BX2
-N,,,,,,,,-30,BX2
-O,,,,,,-10,N,20,BX2; SX1
-P,,,,,,,,-20,BX2; SX1", "Invalid close action position in pattern row H: BX2"},
-                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
-A,B1; S1,10,BX1; SX1,20,N,10,N,20
-B,,,,,,,,-20,N
-C,,,,,,-10,N,30,N
-D,,,,,,,,-30,N
-E,,,,-20,S2,20,B3; SX2,20,BX3
-F,,,,,,,,-20,BX3
-G,,,,,,-20,SX2,10,N
-H,,,,,,,,-10,N
-I,,-10,B2; BX1,30,SX1,20,N,10,BX3
-J,,,,,,,,-10,BX2
-K,,,,,,-20,N,20,BX2
-L,,,,,,,,-20,BX2
-M,,,,-30,N,10,SX1,30,BX2
-N,,,,,,,,-30,BX2
-O,,,,,,-10,N,20,BX2; SX1
-P,,,,,,,,-20,BX2; SX1", "Invalid close action position in pattern row I: BX3"},
-                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
-A,B1; S1,10,BX1; SX1,20,N,10,N,20
-B,,,,,,,,-20,N
-C,,,,,,-10,N,30,N
-D,,,,,,,,-30,N
-E,,,,-20,S2,20,B3; SX2,20,BX3
-F,,,,,,,,-20,BX3
-G,,,,,,-20,SX2,10,N
-H,,,,,,,,-10,N
-I,,-10,B2; BX1,30,SX1,20,N,10,BX2
-J,,,,,,,,-10,BX2
-K,,,,,,-20,N,20,BX4
-L,,,,,,,,-20,BX2
-M,,,,-30,N,10,SX1,30,BX2
-N,,,,,,,,-30,BX2
-O,,,,,,-10,N,20,BX2; SX1
-P,,,,,,,,-20,BX2; SX1", "Invalid close action position in pattern row K: BX4"}
-            };
-
-        [Test, TestCaseSource("isCloseActionPositionValidFailData")]
-        public void IsCloseActionPositionValidFailTest(string pattern, string error)
-        {
-            var patternParser = new PatternParser();
-            var data = patternParser.Parse(pattern);
-            var patternNormalizer = new PatternNormalizer();
-            data = patternNormalizer.TransferDownPattern(data);
-
-            var result = patternValidator.IsCloseActionPositionValid(data);
-
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result.First(), Is.EqualTo(error));
-        }
-
-        #endregion
-
         #region IsActionDuplicatePositionValidTest
 
         [Test]
@@ -829,6 +725,213 @@ P,,,,,,,,-20,BX2; SX1", "Duplicate action in pattern row M: BX1"},
             var data = patternParser.Parse(pattern);
 
             var result = patternValidator.IsActionDuplicateValid(data);
+
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result.First(), Is.EqualTo(error));
+        }
+
+        #endregion
+
+        #region IsLegsValidTest
+
+        [Test]
+        public void IsLegsValidTest()
+        {
+            const string pattern = @",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
+A,B1; S1,10,BX1; SX1,20,N,10,N,20,N
+B,,,,,,,,-20,N
+C,,,,,,-10,N,30,N
+D,,,,,,,,-30,N
+E,,,,-20,S2,20,B3; SX2,20,BX3
+F,,,,,,,,-20,BX3
+G,,,,,,-20,SX2,10,N
+H,,,,,,,,-10,N
+I,,-10,B2; BX1,30,SX1,20,N,10,BX2
+J,,,,,,,,-10,BX2
+K,,,,,,-20,N,20,BX2
+L,,,,,,,,-20,BX2
+M,,,,-30,N,10,SX1,30,BX2
+N,,,,,,,,-30,BX2
+O,,,,,,-10,N,20,BX2; SX1
+P,,,,,,,,-20,BX2; SX1";
+
+            var patternParser = new PatternParser();
+            var data = patternParser.Parse(pattern);
+            var patternNormalizer = new PatternNormalizer();
+            data = patternNormalizer.TransferDownPattern(data);
+
+            var result = patternValidator.IsLegsValid(data);
+
+            Assert.That(result.Count, Is.EqualTo(0));
+        }
+
+        private static readonly object[] isLegsValidFailData =
+            {
+                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
+A,B1; S1,-10,BX1; SX1,20,N,10,N,20
+B,,,,,,,,-20,N
+C,,,,,,-10,N,30,N
+D,,,,,,,,-30,N
+E,,,,-20,S2,20,B3; SX2,20,BX3
+F,,,,,,,,-20,BX3
+G,,,,,,-20,SX2,10,N
+H,,,,,,,,-10,BX2
+I,,-10,B2; BX1,30,SX1,20,N,10,BX2
+J,,,,,,,,-10,BX2
+K,,,,,,-20,N,20,BX2
+L,,,,,,,,-20,BX2
+M,,,,-30,N,10,SX1,30,BX2
+N,,,,,,,,-30,BX2
+O,,,,,,-10,N,20,BX2; SX1
+P,,,,,,,,-20,BX2; SX1", "Wrong leg in pattern row A: -10"},
+                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
+A,B1; S1,10,BX1; SX1,20,N,10,N,20
+B,,,,,,,,-20,N
+C,,,,,,10,N,30,N
+D,,,,,,,,-30,N
+E,,,,-20,S2,20,B3; SX2,20,BX3
+F,,,,,,,,-20,BX3
+G,,,,,,-20,SX2,10,N
+H,,,,,,,,-10,BX2
+I,,-10,B2; BX1,30,SX1,20,N,10,BX2
+J,,,,,,,,-10,BX2
+K,,,,,,-20,N,20,BX2
+L,,,,,,,,-20,BX2
+M,,,,-30,N,10,SX1,30,BX2
+N,,,,,,,,-30,BX2
+O,,,,,,-10,N,20,BX2; SX1
+P,,,,,,,,-20,BX2; SX1", "Wrong leg in pattern row C: 10"},
+                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
+A,B1; S1,10,BX1; SX1,20,N,10,N,20
+B,,,,,,,,-20,N
+C,,,,,,-10,N,30,N
+D,,,,,,,,-30,N
+E,,,,-20,S2,20,B3; SX2,20,BX3
+F,,,,,,,,-20,BX3
+G,,,,,,-20,SX2,10,N
+H,,,,,,,,-10,BX2
+I,,-10,B2; BX1,30,SX1,20,N,10,BX2
+J,,,,,,,,-10,BX2
+K,,,,,,-20,N,20,BX2
+L,,,,,,,,20,BX2
+M,,,,-30,N,10,SX1,30,BX2
+N,,,,,,,,-30,BX2
+O,,,,,,-10,N,20,BX2; SX1
+P,,,,,,,,-20,BX2; SX1", "Wrong leg in pattern row L: 20"},
+            };
+
+        [Test, TestCaseSource("isLegsValidFailData")]
+        public void IsLegsValidFailTest(string pattern, string error)
+        {
+            var patternParser = new PatternParser();
+            var data = patternParser.Parse(pattern);
+            var patternNormalizer = new PatternNormalizer();
+            data = patternNormalizer.TransferDownPattern(data);
+
+            var result = patternValidator.IsLegsValid(data);
+
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result.First(), Is.EqualTo(error));
+        }
+        #endregion
+
+        #region IsCloseActionPositionValidTest
+
+        [Test]
+        public void IsCloseActionPositionValidTest()
+        {
+            const string pattern = @",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
+A,B1; S1,10,BX1; SX1,20,N,10,N,20,N
+B,,,,,,,,-20,N
+C,,,,,,-10,N,30,N
+D,,,,,,,,-30,N
+E,,,,-20,S2,20,B3; SX2,20,BX3
+F,,,,,,,,-20,BX3
+G,,,,,,-20,SX2,10,N
+H,,,,,,,,-10,N
+I,,-10,B2; BX1,30,SX1,20,N,10,BX2
+J,,,,,,,,-10,BX2
+K,,,,,,-20,N,20,BX2
+L,,,,,,,,-20,BX2
+M,,,,-30,N,10,SX1,30,BX2
+N,,,,,,,,-30,BX2
+O,,,,,,-10,N,20,BX2; SX1
+P,,,,,,,,-20,BX2; SX1";
+
+            var patternParser = new PatternParser();
+            var data = patternParser.Parse(pattern);
+            var patternNormalizer = new PatternNormalizer();
+            data = patternNormalizer.TransferDownPattern(data);
+
+            var result = patternValidator.IsCloseActionPositionValid(data);
+
+            Assert.That(result.Count, Is.EqualTo(0));
+        }
+
+        private static readonly object[] isCloseActionPositionValidFailData =
+            {
+                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
+A,B1; S1,10,BX1; SX1,20,N,10,N,20
+B,,,,,,,,-20,N
+C,,,,,,-10,N,30,N
+D,,,,,,,,-30,N
+E,,,,-20,S2,20,B3; SX2,20,BX3
+F,,,,,,,,-20,BX3
+G,,,,,,-20,SX2,10,N
+H,,,,,,,,-10,BX2
+I,,-10,B2; BX1,30,SX1,20,N,10,BX2
+J,,,,,,,,-10,BX2
+K,,,,,,-20,N,20,BX2
+L,,,,,,,,-20,BX2
+M,,,,-30,N,10,SX1,30,BX2
+N,,,,,,,,-30,BX2
+O,,,,,,-10,N,20,BX2; SX1
+P,,,,,,,,-20,BX2; SX1", "Invalid close action position in pattern row H: BX2"},
+                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
+A,B1; S1,10,BX1; SX1,20,N,10,N,20
+B,,,,,,,,-20,N
+C,,,,,,-10,N,30,N
+D,,,,,,,,-30,N
+E,,,,-20,S2,20,B3; SX2,20,BX3
+F,,,,,,,,-20,BX3
+G,,,,,,-20,SX2,10,N
+H,,,,,,,,-10,N
+I,,-10,B2; BX1,30,SX1,20,N,10,BX3
+J,,,,,,,,-10,BX2
+K,,,,,,-20,N,20,BX2
+L,,,,,,,,-20,BX2
+M,,,,-30,N,10,SX1,30,BX2
+N,,,,,,,,-30,BX2
+O,,,,,,-10,N,20,BX2; SX1
+P,,,,,,,,-20,BX2; SX1", "Invalid close action position in pattern row I: BX3"},
+                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
+A,B1; S1,10,BX1; SX1,20,N,10,N,20
+B,,,,,,,,-20,N
+C,,,,,,-10,N,30,N
+D,,,,,,,,-30,N
+E,,,,-20,S2,20,B3; SX2,20,BX3
+F,,,,,,,,-20,BX3
+G,,,,,,-20,SX2,10,N
+H,,,,,,,,-10,N
+I,,-10,B2; BX1,30,SX1,20,N,10,BX2
+J,,,,,,,,-10,BX2
+K,,,,,,-20,N,20,BX4
+L,,,,,,,,-20,BX2
+M,,,,-30,N,10,SX1,30,BX2
+N,,,,,,,,-30,BX2
+O,,,,,,-10,N,20,BX2; SX1
+P,,,,,,,,-20,BX2; SX1", "Invalid close action position in pattern row K: BX4"}
+            };
+
+        [Test, TestCaseSource("isCloseActionPositionValidFailData")]
+        public void IsCloseActionPositionValidFailTest(string pattern, string error)
+        {
+            var patternParser = new PatternParser();
+            var data = patternParser.Parse(pattern);
+            var patternNormalizer = new PatternNormalizer();
+            data = patternNormalizer.TransferDownPattern(data);
+
+            var result = patternValidator.IsCloseActionPositionValid(data);
 
             Assert.That(result.Count, Is.EqualTo(1));
             Assert.That(result.First(), Is.EqualTo(error));

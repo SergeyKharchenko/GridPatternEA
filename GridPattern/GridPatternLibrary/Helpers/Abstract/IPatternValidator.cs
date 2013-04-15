@@ -9,6 +9,7 @@ namespace GridPatternLibrary.Helpers.Abstract
         List<string> IsSyntaxValid(List<List<string>> pattern);
         List<string> IsTypesValid(List<List<string>> pattern);
         List<string> IsActionDuplicateValid(List<List<string>> pattern);
+        List<string> IsLegsValid(List<List<string>> pattern);
         List<string> IsCloseActionPositionValid(List<List<string>> pattern);
     }
 }

@@ -76,6 +76,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ActionParserTests.cs" />
     <Compile Include="GetDataTests.cs" />
     <Compile Include="PatternDispatcherTests.cs" />
     <Compile Include="PatternNormalizerTests.cs" />

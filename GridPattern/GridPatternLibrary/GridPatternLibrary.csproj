@@ -47,6 +47,7 @@
     <Compile Include="Helpers\Abstract\IPatternNormalizer.cs" />
     <Compile Include="Helpers\Abstract\IPatternParser.cs" />
     <Compile Include="Helpers\Abstract\IPatternValidator.cs" />
+    <Compile Include="Helpers\Concrete\ActionParser.cs" />
     <Compile Include="Helpers\Concrete\FileHelper.cs" />
     <Compile Include="Helpers\Concrete\PatternDispatcher.cs" />
     <Compile Include="Helpers\Concrete\PatternNormalizer.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Support\Logger.cs" />
     <Compile Include="Support\MqlStr.cs" />
     <Compile Include="Support\MutexExtension.cs" />
+    <Compile Include="TradeAction.cs" />
     <Compile Include="Xml\ToXml.cs" />
     <Compile Include="Xml\XmlRecordAppender.cs" />
     <Compile Include="Xml\XmlRecordCleaner.cs" />

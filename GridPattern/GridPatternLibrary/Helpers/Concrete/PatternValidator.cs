@@ -167,6 +167,32 @@ namespace GridPatternLibrary.Helpers.Concrete
             return errors;
         }
 
+        public List<string> IsLegsValid(List<List<string>> pattern)
+        {
+            var errors = new List<string>();            
+            
+            var checkSighFunc = new Dictionary<bool, Func<string, bool>>
+                {
+                    {true, s => int.Parse(s) > 0},
+                    {false, s => int.Parse(s) < 0}
+                };
+            var sameLegCount = 8;
+            for (var column = 1; column < pattern[0].Count; column += 2)
+            {
+                var checkSighPositive = true;
+                for (var row = 0; row < pattern.Count; row += sameLegCount, checkSighPositive = !checkSighPositive)
+                {
+                    if (!checkSighFunc[checkSighPositive](pattern[row][column]))
+                        errors.Add(string.Format("Wrong leg in pattern row {0}: {1}",
+                                                 PatternTransformer.IntToChar(row), pattern[row][column]));
+                }
+
+                sameLegCount /= 2;
+            }
+
+            return errors;
+        }
+
         private static bool FindDuplicate(List<List<string>> pattern, int rowIndex, int columnIndex, string currentAction, out int duplicateRowIndex)
         {
             var found = false;
