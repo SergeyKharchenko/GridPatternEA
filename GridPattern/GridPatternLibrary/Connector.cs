@@ -125,10 +125,10 @@ namespace GridPatternLibrary
         }
 
         [DllExport]
-        public static string GetPattern(int gate, int sameLegCount)
+        public static string GetPattern(int pattern, int sameLegCount)
         {
             var patterns = string.Empty;
-            for (var i = gate; i < gate + sameLegCount; i++)
+            for (var i = pattern; i < pattern + sameLegCount; i++)
                 patterns += PatternTransformer.IntToChar(i);
 
             return patterns;
@@ -187,6 +187,18 @@ namespace GridPatternLibrary
             }
             locker.ExitReadLock();
             return dictionary.Count;
+        }
+
+        [DllExport]
+        public static void AppendToLog(string appName, int id, string info)
+        {
+            Log4Net.GetLogger(appName, id).Info(info);
+        }
+
+        [DllExport]
+        public static void CloseLog(int id)
+        {
+            Log4Net.ShoutdownLogger(id);
         }
     }
 }

@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -55,6 +59,7 @@
     <Compile Include="Helpers\Concrete\PatternTransformer.cs" />
     <Compile Include="Helpers\Concrete\PatternValidator.cs" />
     <Compile Include="Helpers\Concrete\UnsafeCodeHelper.cs" />
+    <Compile Include="Log4Net.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Support\DllExport.cs" />
     <Compile Include="Support\Functions.cs" />
@@ -66,6 +71,9 @@
     <Compile Include="Xml\XmlRecordAppender.cs" />
     <Compile Include="Xml\XmlRecordCleaner.cs" />
     <Compile Include="Xml\XmlRecordReader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
