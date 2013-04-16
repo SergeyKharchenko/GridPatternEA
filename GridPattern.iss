@@ -422,7 +422,9 @@ begin
     ExtractTemporaryFile(GetFileFromPath(ExpandConstant('{#inFiles[0]}')));
     ExtractTemporaryFile(GetFileFromPath(ExpandConstant('{#inFiles[1]}')));               
     ExtractTemporaryFile(GetFileFromPath(ExpandConstant('{#inFiles[2]}')));
-    ExtractTemporaryFile(GetFileFromPath(ExpandConstant('{#inFiles[3]}')));
+    ExtractTemporaryFile(GetFileFromPath(ExpandConstant('{#inFiles[3]}')));            
+    ExtractTemporaryFile(GetFileFromPath(ExpandConstant('{#inFiles[4]}')));
+    ExtractTemporaryFile(GetFileFromPath(ExpandConstant('{#inFiles[5]}')));
     
     for i := 0 to GetArrayLength(InstalledTerminals) - 1 do begin
       if (InstalledTerminalsCheckBoxes.Checked[i]) then begin
