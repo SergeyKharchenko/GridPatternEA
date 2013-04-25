@@ -26,7 +26,8 @@
 extern string MagicNumber_Help = "Should be unique for each window!!!";
 extern int MagicNumber = 42;
 extern bool StartNewSession = true;
-extern string PatterFile = "Pattern.csv";
+extern string PatternFile = "Pattern.csv";
+extern bool UseLog = true;
 
 extern string LotsSettings = "----------------------------------------------------------------------------------------";
 extern double Lots = 1;
@@ -93,7 +94,7 @@ int init()
          actions[i][j] = "asdvvgbrewr ,iomvre v erklfc kn;dkcds" + i + j;
    error[0] = "hbsfvlbdsvbuidrfbvduipfbviusdnv;u,vsdl;kvkdsnkvnuvn;aweknvbsdj";
          
-   int isLoaded = GetData(PatterFile, legs, actions, error);      
+   int isLoaded = GetData(PatternFile, legs, actions, error);      
       
    if (isLoaded == 0)
       ShowCriticalAlertAndStop("Pattern error: " + error[0]);
@@ -229,11 +230,6 @@ int start()
       Redraw();      
    }   
 
-   Comment("pattern: ", pattern, "\n",
-           "gate: ", gate + "\n",
-           "upper: ", GetEntry(0) + "\n",
-           "lower: ", GetEntry(1) + "\n");
-
    while (debug);
    return(0);
 }
@@ -291,8 +287,6 @@ int GetEntry(int side)
    }
    if (entry == -1)
       return (-1);
-   if ((Digits == 5) || (Digits == 3))
-      entry *= 10;
    return (entry);
 }
 //+------------------------------------------------------------------+
@@ -306,6 +300,8 @@ void SelectNextGate(int side)
       if (McMartin)
          if (IsWatchedPattern(pattern, WatchedPatterns) == 1)
             lots = NormalizeLots(lots * LotsX + LotsY/LotsZ, Symbol());
+         else
+            lots = NormalizeLots(Lots, Symbol());   
       RedrawRun();
       gate = 0;
       pattern = 0;
@@ -443,10 +439,6 @@ void Redraw()
 //+------------------------------------------------------------------+
 void RedrawLegLine(string name, int time1, double price1, int time2, double price2, color lineColor, int width)
 {  
-   //ObjectCreate(objName + " e", OBJ_ARROW, 0, entriesTime[gate], entries[gate]);
-   //ObjectSet(objName + " e", OBJPROP_ARROWCODE, SYMBOL_STOPSIGN);
-   //ObjectSet(objName + " e", OBJPROP_COLOR, DeepPink);
-
    string objName = name;   
    ObjectCreate(objName, OBJ_TREND, 0, time1, price1, time2, price2);
    ObjectSet(objName, OBJPROP_COLOR, lineColor);
@@ -516,7 +508,8 @@ void RedrawRun()
    string message = "Pattern: " + GetPattern(pattern, 1) +
                     "   Gate0: " + TimeToStr(entriesTime[0]) + " price: " + DoubleToStr(entries[0], Digits) +
                     " --- Gate4: " + TimeToStr(entriesTime[4]) + " price: " + DoubleToStr(entries[4], Digits);
-   AppendToLog(appName, MagicNumber, message);         
+   if (UseLog)                 
+      AppendToLog(appName, MagicNumber, message);         
 }
 //+------------------------------------------------------------------+
 

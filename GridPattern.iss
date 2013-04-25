@@ -1,10 +1,10 @@
 [Setup]
 
 ;TODO Put the application name here:
-#define ApplicationName "GridPattern v0.1"
+#define ApplicationName "GridPattern v0.3"
 
-AppName    = GridPattern v0.1
-AppVersion = 0.1
+AppName    = GridPattern v0.3
+AppVersion = 0.3
 
 WizardImageFile      = sources\img\LeftIn.bmp
 WizardSmallImageFile = sources\img\Top.bmp
@@ -23,7 +23,7 @@ DefaultGroupName = {#ApplicationName}
 ;TODO Directory where installer file will be generated
 OutputDir          = output
 ;TODO Name of installer file
-OutputBaseFilename = GridPattern v0.1
+OutputBaseFilename = GridPattern v0.3
 
 Uninstallable      = yes
 
@@ -40,16 +40,16 @@ UninstallDisplayIcon = {app}\icons\Uninstall 32_32.ico
 #dim inFiles[filesTotal]
 #define inFiles[0] "sources\GridPattern.mq4"
 #define inFiles[1] "sources\GridPattern.ex4"
-#define inFiles[2] "sources\GridPattern.library.dll"
+#define inFiles[2] "sources\GridPatternlibrary.dll"
 #define inFiles[3] "sources\log4net.dll"
 #define inFiles[4] "sources\Pattern.xlsx"
 #define inFiles[5] "sources\Pattern.csv"
 
 ;TODO Output directories and names for above files inside MetaTrader directory
 #dim outFiles[filesTotal]
-#define outFiles[0] "experts\GridPattern v0.1.mq4"
-#define outFiles[1] "experts\GridPattern v0.1.ex4"
-#define outFiles[2] "experts\libraries\GridPattern.library.dll"
+#define outFiles[0] "experts\GridPattern v0.3.mq4"
+#define outFiles[1] "experts\GridPattern v0.3.ex4"
+#define outFiles[2] "experts\libraries\GridPatternlibrary.dll"
 #define outFiles[3] "\log4net.dll"
 #define outFiles[4] "experts\files\Pattern.xlsx"
 #define outFiles[5] "experts\files\Pattern.csv"
