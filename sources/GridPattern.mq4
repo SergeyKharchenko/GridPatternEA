@@ -7,7 +7,7 @@
 #property link      "http://airbionicfx.com"
 
 #import "GridPatternLibrary.dll"
-   int GetData(string filePath, int& legs[], string& actions[], string& error[]);
+   int GetData(string filePath, string fileName, int& legs[], string& actions[], string& error[]);
    int ParseActions(string actionsStr, string& actions[], int& magics[]);
    string GetPattern(int gate, int sameLegCount);
    int IsWatchedPattern(int pattern, string watchedPatterns);
@@ -91,10 +91,10 @@ int init()
 
    for (int i = 0; i < 16; i++)
       for (int j = 0; j < 5; j++)
-         actions[i][j] = "asdvvgbrewr ,iomvre v erklfc kn;dkcds" + i + j;
-   error[0] = "hbsfvlbdsvbuidrfbvduipfbviusdnv;u,vsdl;kvkdsnkvnuvn;aweknvbsdj";
+         actions[i][j] = "action example | action example | action example | action example: " + i + j;
+   error[0] = "error example | error example | error example | error example | error example: ";
          
-   int isLoaded = GetData(PatternFile, legs, actions, error);      
+   int isLoaded = GetData(TerminalPath(), PatternFile, legs, actions, error);      
       
    if (isLoaded == 0)
       ShowCriticalAlertAndStop("Pattern error: " + error[0]);

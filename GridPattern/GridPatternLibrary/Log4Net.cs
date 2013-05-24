@@ -93,10 +93,8 @@ namespace GridPatternLibrary
                 
                 foreach (var appender in ((IAppenderAttachable) logger.Logger).Appenders)
                 {
-                    Console.WriteLine("close");
                     appender.Close();
                 }
-                //LogManager.ShutdownRepository(repositoryName);
             }
 
         }

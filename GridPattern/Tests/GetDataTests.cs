@@ -68,7 +68,7 @@ P,,,,,,,,-20,BX2; SX1";
             patternDispatcherMock.Setup(helper => helper.Dispatch(normalizedPattern)).Returns(new DispatchedPattern(true, string.Empty));
 
             var error = string.Empty;
-            var dispatchedPattern = Connector.GetData("pattern.csv");
+            var dispatchedPattern = Connector.GetData(Directory.GetCurrentDirectory(), "pattern.csv");
 
             fileHelperMock.Verify(helper => helper.ReadFile(filePath), Times.Once());
             patternParserMock.Verify(helper => helper.Parse(Pattern), Times.Once());

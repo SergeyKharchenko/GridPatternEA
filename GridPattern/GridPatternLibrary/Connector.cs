@@ -37,9 +37,9 @@ namespace GridPatternLibrary
         } 
 
         [DllExport]
-        public static unsafe int GetData(string filePath, int* legs, MqlStr* actions, MqlStr* errors)
+        public static unsafe int GetData(string filePath, string fileName, int* legs, MqlStr* actions, MqlStr* errors)
         {
-            var dispatchedPettern = GetData(filePath);
+            var dispatchedPettern = GetData(filePath, fileName);
             if (!dispatchedPettern.Success)
             {
                 errors[0].SetString(dispatchedPettern.Error);
@@ -57,12 +57,13 @@ namespace GridPatternLibrary
                     var index = UnsafeCodeHelper.Index(i, j, 16, 5);
                     actions[index].SetString(dispatchedPettern.Actions[i][j]);
                 }
+           
             return 1;
         }
 
-        public static DispatchedPattern GetData(string filePath)
+        public static DispatchedPattern GetData(string filePath, string fileName)
         {
-            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), @"experts\files", filePath);
+            var fullPath = Path.Combine(filePath, @"experts\files", fileName);
             string pattern;
             try
             {
