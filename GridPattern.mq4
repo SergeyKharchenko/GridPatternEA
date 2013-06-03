@@ -35,7 +35,9 @@ extern double LotsX = 1;
 extern double LotsY = 1;
 extern double LotsZ = 1;
 extern bool McMartin = false;
-extern string WatchedPatterns = "AKOP";
+extern string McMartinPatterns = "AKOP";
+extern bool McMute = false;
+extern string McMutePatterns = "AKOP";
 
 extern string ColorSettings = "----------------------------------------------------------------------------------------";
 extern color EntryColor = Red;
@@ -298,10 +300,12 @@ void SelectNextGate(int side)
    if (gate > 4)
    {
       if (McMartin)
-         if (IsWatchedPattern(pattern, WatchedPatterns) == 1)
+         if (IsWatchedPattern(pattern, McMartinPatterns) == 1)
             lots = NormalizeLots(lots * LotsX + LotsY/LotsZ, Symbol());
          else
-            lots = NormalizeLots(Lots, Symbol());   
+            if (!McMute || (IsWatchedPattern(pattern, McMutePatterns) != 1))
+               lots = NormalizeLots(Lots, Symbol());  
+                
       RedrawRun();
       gate = 0;
       pattern = 0;
