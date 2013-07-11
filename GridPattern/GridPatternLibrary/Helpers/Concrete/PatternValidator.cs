@@ -60,10 +60,10 @@ namespace GridPatternLibrary.Helpers.Concrete
 
             var validActionPatterns = new List<string>
                 {
-                    @"(;|^)BX(?!0)[0-9]{1,2}(;|$)",
-                    @"(;|^)B(?!0)[0-9]{1,2}(;|$)",
-                    @"(;|^)SX(?!0)[0-9]{1,2}(;|$)",
-                    @"(;|^)S(?!0)[0-9]{1,2}(;|$)",
+                    @"(;|^)BX[0-9]{1,2}(;|$)",
+                    @"(;|^)B[0-9]{1,2}(;|$)",
+                    @"(;|^)SX[0-9]{1,2}(;|$)",
+                    @"(;|^)S[0-9]{1,2}(;|$)",
                     @"(;|^)N(;|$)",
                     @"(;|^)\-?\d+(;|$)",
                     @";",
@@ -89,7 +89,14 @@ namespace GridPatternLibrary.Helpers.Concrete
             var regex = new Regex(validActionPattern);
             foreach (var row in pattern)
                 for (var j = 0; j < row.Count; j++)
-                    row[j] = regex.Replace(row[j], "", 1);
+                {
+                    string initialData;
+                    do
+                    {
+                        initialData = row[j];
+                        row[j] = regex.Replace(row[j], "");
+                    } while (initialData != row[j]);
+                }
             return pattern;
         }
 

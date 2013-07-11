@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using GridPatternLibrary.Helpers.Concrete;
 using NUnit.Framework;
 using System.Linq;
@@ -22,11 +23,11 @@ namespace Tests
         public void IsSizeValidTest()
         {
             const string pattern = @",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
-A,B1; S1,10,BX1; SX1,20,N,10,N,20,N
+A,B1; S1,10,SX1,20,N,10,N,20,N
 B,,,,,,,,-20,N
 C,,,,,,-10,N,30,N
 D,,,,,,,,-30,N
-E,,,,-20,S2,20,B3; SX2,20,BX3
+E,,,,-20,S2,20,B3; SX2,20,BX1; BX3
 F,,,,,,,,-20,BX3
 G,,,,,,-20,SX2,10,N
 H,,,,,,,,-10,N
@@ -168,11 +169,11 @@ P,,,,,,,-20,BX2; SX1", "P"}
         public void IsPositionsValidTest()
         {
             const string pattern = @",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
-A,B1; S1,10,BX1; SX1,20,N,10,N,20,N
+A,B1; S1,10,SX1,20,N,10,N,20,N
 B,,,,,,,,-20,N
 C,,,,,,-10,N,30,N
 D,,,,,,,,-30,N
-E,,,,-20,S2,20,B3; SX2,20,BX3
+E,,,,-20,S2,20,B3; SX2,20,BX1; BX3
 F,,,,,,,,-20,BX3
 G,,,,,,-20,SX2,10,N
 H,,,,,,,,-10,N
@@ -285,22 +286,22 @@ P,,,,,,,S5,-20,BX2; SX1", "Invalid element position in pattern row P"},
         public void IsSyntaxValidTest()
         {
             const string pattern = @",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
-A,B1; S1,10,BX1; SX1,20,N,10,N,20,N
+A,B1; B2;S1;S2,10,BX1; BX2,20,N,10,N,20,N
 B,,,,,,,,-20,N
 C,,,,,,-10,N,30,N
 D,,,,,,,,-30,N
-E,,,,-20,S2,20,B3; SX2,20,BX3
-F,,,,,,,,-20,BX3
-G,,,,,,-20,SX2,10,N
+E,,,,-20,N,20,N,20,N
+F,,,,,,,,-20,N
+G,,,,,,-20,N,10,N
 H,,,,,,,,-10,N
-I,,-10,B2; BX1,30,SX1,20,N,10,BX2
-J,,,,,,,,-10,BX2
-K,,,,,,-20,N,20,BX2
-L,,,,,,,,-20,BX2
-M,,,,-30,N,10,SX1,30,BX2
-N,,,,,,,,-30,BX2
-O,,,,,,-10,N,20,BX2; SX1
-P,,,,,,,,-20,BX2; SX1";
+I,,-10,SX1;SX2,30,N,20,N,10,N
+J,,,,,,,,-10,N
+K,,,,,,-20,N,20,N
+L,,,,,,,,-20,N
+M,,,,-30,N,10,N,30,N
+N,,,,,,,,-30,N
+O,,,,,,-10,N,20,N
+P,,,,,,,,-20,N";
 
             var patternParser = new PatternParser();
             var data = patternParser.Parse(pattern);
@@ -380,23 +381,6 @@ M,,,,-30,N,10,SX1,30,BX2
 N,,,,,,,,-30,BX2
 O,,,,,,-10,N,20,BX2; SX1
 P,,,,,,,,-20,BX2; SX1", "Invalid action in pattern row B: NN"},
-                new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
-A,B1; S1,10,BX1; SX1,20,N,10,N,20,N
-B,,,,,,,,N
-C,,,,,,-10,N,30,N
-D,,,,,,,,-30,N
-E,,,,-20,S2,20,B3; B3; SX2,20,BX3
-F,,,,,,,,-20,BX3
-G,,,,,,-20,SX2,10,N
-H,,,,,,,,-10,N
-I,,-10,B2; BX1,30,SX1,20,N,10,BX2
-J,,,,,,,,-10,BX2
-K,,,,,,-20,N,20,BX2
-L,,,,,,,,-20,BX2
-M,,,,-30,N,10,SX1,30,BX2
-N,,,,,,,,-30,BX2
-O,,,,,,-10,N,20,BX2; SX1
-P,,,,,,,,-20,BX2; SX1", "Invalid action in pattern row E: B3"},
                 new object[] {@",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
 A,B1; S1,10,BX1; SX1,20,N,10,N,20,N
 B,,,,,,,,N
@@ -504,11 +488,11 @@ P,,,,,,,,-20,BX2; SX1", "Invalid action in pattern row N: B0X"}
         public void IsTypesValidTest()
         {
             const string pattern = @",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
-A,B1; S1,10,BX1; SX1,20,N,10,N,20,N
+A,B1; S1,10,SX1,20,N,10,N,20,N
 B,,,,,,,,-20,N
 C,,,,,,-10,N,30,N
 D,,,,,,,,-30,N
-E,,,,-20,S2,20,B3; SX2,20,BX3
+E,,,,-20,S2,20,B3; SX2,20,BX1; BX3
 F,,,,,,,,-20,BX3
 G,,,,,,-20,SX2,10,N
 H,,,,,,,,-10,N
@@ -604,11 +588,11 @@ P,,,,,,,,-20,BX2; SX1", "Invalid element type in pattern row M: -1"},
         public void IsActionDuplicatePositionValidTest()
         {
             const string pattern = @",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
-A,B1; S1,10,BX1; SX1,20,N,10,N,20,N
+A,B1; S1,10,SX1,20,N,10,N,20,N
 B,,,,,,,,-20,N
 C,,,,,,-10,N,30,N
 D,,,,,,,,-30,N
-E,,,,-20,S2,20,B3; SX2,20,BX3
+E,,,,-20,S2,20,B3; SX2,20,BX1; BX3
 F,,,,,,,,-20,BX3
 G,,,,,,-20,SX2,10,N
 H,,,,,,,,-10,N
@@ -841,11 +825,11 @@ P,,,,,,,,-20,BX2; SX1", "Wrong leg in pattern row L: 20"},
         public void IsCloseActionPositionValidTest()
         {
             const string pattern = @",Gate0,Leg1,Gate1,Leg2,Gate2,Leg3,Gate3,Leg4,Gate4
-A,B1; S1,10,BX1; SX1,20,N,10,N,20,N
+A,B1; S1,10,SX1,20,N,10,N,20,N
 B,,,,,,,,-20,N
 C,,,,,,-10,N,30,N
 D,,,,,,,,-30,N
-E,,,,-20,S2,20,B3; SX2,20,BX3
+E,,,,-20,S2,20,B3; SX2,20,BX1; BX3
 F,,,,,,,,-20,BX3
 G,,,,,,-20,SX2,10,N
 H,,,,,,,,-10,N
